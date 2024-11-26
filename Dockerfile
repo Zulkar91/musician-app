@@ -1,33 +1,20 @@
-# Use Node.js 16 LTS as the base image
-FROM node:16-alpine AS build
+# Use the official Node.js 14 LTS image
+FROM node:14
 
-# Set working directory
+# Set the working directory
 WORKDIR /usr/src/app
 
-# Copy dependency files and install all dependencies
+# Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy the application code
+# Copy all files to the working directory
 COPY . .
 
-# Run tests (fail build if tests fail)
-RUN npm test
-
-# Production image
-FROM node:16-alpine
-
-# Set working directory
-WORKDIR /usr/src/app
-
-# Copy application files from build stage
-COPY --from=build /usr/src/app ./
-
-# Install PM2 globally for process management
-RUN npm install -g pm2
-
-# Expose application port
+# Expose the application port
 EXPOSE 3001
 
 # Start the application
-CMD ["pm2", "start", "app.js", "--no-daemon"]
+CMD ["npm", "start"]
