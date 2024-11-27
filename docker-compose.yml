@@ -1,7 +1,6 @@
-version: "3.8"
+version: "3.7"
 services:
   app:
     image: musician-app:latest
     ports:
       - "3001:3001"
-    restart: always
